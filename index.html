@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do list</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="to-do">
+            <h2>To-do List <img src="images/icon.png"></h2>
+            <div class="text">
+                <input type="text" id="search" placeholder="plan your day">
+                <button onclick="addTask()">Add</button>
+            </div>
+            <ul id="list-container">
+            <!-- <li class="checked"></li> -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let searchTask = document.getElementById("search");
+        let listContainer = document.getElementById("list-container");
+
+        function addTask(){
+            if( searchTask.value === ""){
+                alert("Please enter a task");
+            }
+            else{
+                //to add task 
+                let li = document.createElement("li"); //create element
+                li.innerHTML = searchTask.value;  //display data in innerhtml
+                listContainer.appendChild(li);
+                //add x button
+                let span = document.createElement("span");
+                span.innerHTML = "\u00d7";
+                li.appendChild(span);
+            }
+            // for search is empty when task is added
+            searchTask.value = "";
+            saveData();
+        }
+
+        listContainer.addEventListener("click", function(e){
+            if(e.target.tagName === "LI"){   // when we click on li it check list is selected if select then it unslect by using toggle
+                e.target.classList.toggle("checked");
+                saveData();
+            }
+            else if(e.target.tagName === "SPAN"){ // // when we click on span it will remove the task 
+                e.target.parentElement.remove();
+                saveData();
+            }
+        });
+
+        //to save data & when we refresh page data remain same
+        function saveData(){
+            localStorage.setItem("data", listContainer.innerHTML);
+        }
+
+        //to get saved data
+        function showTask(){
+            listContainer.innerHTML = localStorage.getItem("data");
+        }
+        showTask();
+    </script>
+</body>
+</html>
